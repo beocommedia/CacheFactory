@@ -33,4 +33,55 @@ describe('Cache#removeExpired', function () {
       done()
     }, 1000)
   })
+
+  it.only('should return expired items with non-null values when the storageMode is "localStorage"', function (done) {
+    const cache = new Cache(this.testId, {
+      deleteOnExpire: 'none',
+      storageMode: 'localStorage',
+      maxAge: 10,
+      recycleFreq: 20
+    })
+
+    const item1 = {
+      key: 'item1',
+      expires: 1
+    }
+    const item1Value = 'value1'
+
+    const item2 = {
+      key: 'item2',
+      expires: 2
+    }
+    const item2Value = 2
+
+    const item3 = {
+      key: 'item3',
+      expires: 3
+    }
+    const item3Value = {
+      value3: 'stuff'
+    }
+
+    sinon.stub(cache.$$expiresHeap, 'peek')
+      .onFirstCall().returns(item1)
+      .onSecondCall().returns(item2)
+      .onThirdCall().returns(item3)
+
+    sinon.stub(cache.$$expiresHeap, 'pop')
+
+    sinon.stub(cache, 'remove')
+      .onFirstCall().returns(item1Value)
+      .onSecondCall().returns(item2Value)
+      .onThirdCall().returns(item3Value)
+
+    cache.$$onExpire = false
+
+    const expired = cache.removeExpired()
+    assert.deepEqual(expired, {
+      item1: item1Value,
+      item2: item2Value,
+      item3: item3Value
+    })
+    done()
+  })
 })

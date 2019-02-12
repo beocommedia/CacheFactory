@@ -971,7 +971,10 @@ export default class Cache {
     }
 
     Object.keys(expired).forEach((key) => {
-      this.remove(key)
+      const removedItemValue = this.remove(key)
+      if (!expired[key]) {
+        expired[key] = removedItemValue
+      }
     })
 
     if (this.$$onExpire) {
