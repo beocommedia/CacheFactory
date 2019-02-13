@@ -34,7 +34,7 @@ describe('Cache#removeExpired', function () {
     }, 1000)
   })
 
-  it.only('should return expired items with non-null values when the storageMode is "localStorage"', function (done) {
+  it('should return expired items with non-null values when the storageMode is "localStorage"', function (done) {
     const cache = new Cache(this.testId, {
       deleteOnExpire: 'none',
       storageMode: 'localStorage',
