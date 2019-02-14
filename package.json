@@ -47,6 +47,7 @@
     ]
   },
   "scripts": {
+    "prepare": "npm run bundle",
     "lint": "standard 'src/**/*.js' 'test/**/*.js'",
     "doc": "jsdoc -c conf.json -u guides --readme docs.md src",
     "bundle:es5": "rollup src/index.js -c -o dist/cachefactory.js -m dist/cachefactory.js.map -f umd",
